@@ -28,12 +28,17 @@ namespace Infrastructure.Data
 
         public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
         {
-            return await ApplySpecifiation(spec).FirstOrDefaultAsync(); 
+            return await ApplySpecifiation(spec).FirstOrDefaultAsync();
         }
 
         public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
         {
             return await ApplySpecifiation(spec).ToListAsync();
+        }
+
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecifiation(spec).CountAsync();
         }
 
         private IQueryable<T> ApplySpecifiation(ISpecification<T> spec)

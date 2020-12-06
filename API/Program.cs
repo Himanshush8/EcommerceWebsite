@@ -26,7 +26,9 @@ namespace API
                 try
                 {
                     var context = services.GetRequiredService<StoreContext>();
+                    //Creating or updating the migrations on app startup 
                     await context.Database.MigrateAsync();
+                    //Inserting data in database
                     await StoreContextSeed.SeedAsync(context, loggerFactory);
                 }
                 catch (Exception ex)

@@ -32,17 +32,22 @@ namespace API
 
             services.AddApplicationServices();
             services.AddSwaggerDocumentation();
+
+            //Adding CrossPlatform support to the Api 
+            services.AddCors(option =>
+            {
+                option.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             // if (env.IsDevelopment())
-            // {
             //     app.UseDeveloperExceptionPage();
-            //     app.UseSwagger();
-            //     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
-            // }
 
             //Custom Exception middleware
             app.UseMiddleware<ExceptionMiddleware>();
@@ -53,7 +58,11 @@ namespace API
 
             app.UseRouting();
 
+            //For using static files into tha api  
             app.UseStaticFiles();
+
+            //Adding cors policy
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
