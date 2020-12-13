@@ -33,14 +33,20 @@ namespace API.Middleware
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-                var response = _env.IsDevelopment() ? new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
-                : new ApiResponse((int)HttpStatusCode.InternalServerError);
-
                 var options = new JsonSerializerOptions();
                 options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-                
-                var json = JsonSerializer.Serialize(response, options);
-                await context.Response.WriteAsync(json);
+                if (_env.IsDevelopment())
+                {
+                    ApiException response = new ApiException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString());
+                    var json = JsonSerializer.Serialize(response, options);
+                    await context.Response.WriteAsync(json);
+                }
+                else
+                {
+                    ApiResponse response = new ApiResponse((int)HttpStatusCode.InternalServerError);
+                    var json = JsonSerializer.Serialize(response, options);
+                    await context.Response.WriteAsync(json);
+                }
             }
         }
     }
