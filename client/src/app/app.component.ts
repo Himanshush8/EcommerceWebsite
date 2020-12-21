@@ -20,13 +20,13 @@ export class AppComponent implements OnInit {
   loadCurrentUser() {
     const token = localStorage.getItem('token');
     // Remove if(token) condition if you want to use ReplaySubject
-    if (token) {
-      this.accService.loadCurrentUser(token).subscribe(() => {
-        console.log('Loaded User');
-      }, error => {
-        console.log(error);
-      });
-    }
+    // if (token) {
+    this.accService.loadCurrentUser(token).subscribe(() => {
+      console.log('Loaded User');
+    }, error => {
+      console.log(error);
+    });
+    // }
   }
 
   loadBasket() {
